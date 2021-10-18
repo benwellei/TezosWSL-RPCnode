@@ -6,14 +6,14 @@ Steps to run a local RPC Node using Windows Subsystem for Linux on Windows 10
 
 ## Installing WSL2 and Ubuntu
 
-#### 1) Turn on Windows Subsystem for Linux and Virtual Machine Platform
+### 1) Turn on Windows Subsystem for Linux and Virtual Machine Platform
 
 * Go to Control Panel > Programs and Features > Turn Windows features on or off
 * Check the boxes next to `Windows Subsystem for Linux` and `Virtual Machine Platform`
 * Don't restart yet. Wait until the next step
 
 
-#### 2) Turn Off Fast Startup
+### 2) Turn Off Fast Startup
 
 There are sometimes networking issues that are caused by the fast startup feature.
 
@@ -21,7 +21,7 @@ There are sometimes networking issues that are caused by the fast startup featur
 * Uncheck `Turn on fast startup (recommended)`
 * Restart Computer
 
-#### 3) Enable WSL2 and Install Ubuntu
+### 3) Enable WSL2 and Install Ubuntu
 
 * Open Windows PowerShell
 * Make sure that WSL2 is defaulted: `wsl --set-default-version 2`
@@ -30,14 +30,14 @@ There are sometimes networking issues that are caused by the fast startup featur
 * Ensure that WSL2 is being used buy opening Windows PowerShell and using `wsl -l -v`
 * Update Ubuntu: `sudo apt update` > `sudo apt upgrade`
 
-#### 4) Setting up a Tezos Node
+## Setting up a Tezos Node
 
 * Start Ubuntu and navigate to the home dir `cd $HOME`
 
-##### Install the libraries that Tezos is dependent on
+### 1) Install the libraries that Tezos is dependent on
 `sudo apt update && sudo apt install -y rsync git m4 build-essential patch unzip bubblewrap wget pkg-config libgmp-dev libev-dev libhidapi-dev`
 
-##### Install Rust
+### 2) Install Rust
 `cd $HOME`
 
 `wget https://sh.rustup.rs/rustup-init.sh`
@@ -48,7 +48,7 @@ There are sometimes networking issues that are caused by the fast startup featur
 
 `source $HOME/.cargo/env`
 
-##### Install Zcash Parameters
+### 3) Install Zcash Parameters
 
 `wget https://raw.githubusercontent.com/zcash/zcash/master/zcutil/fetch-params.sh`
 
@@ -56,7 +56,7 @@ There are sometimes networking issues that are caused by the fast startup featur
 
 `./fetch-params.sh`
 
-##### Install OPAM
+### 4) Install OPAM
 
 `wget https://github.com/ocaml/opam/releases/download/2.0.3/opam-2.0.3-x86_64-linux`
 
@@ -64,7 +64,7 @@ There are sometimes networking issues that are caused by the fast startup featur
 
 `sudo chmod a+x /usr/local/bin/opam`
 
-##### Get Sources
+### 5) Get Sources
 
 `git clone https://gitlab.com/tezos/tezos.git`
 
@@ -72,7 +72,7 @@ There are sometimes networking issues that are caused by the fast startup featur
 
 `git checkout latest-release`
 
-##### Install Tezos Dependencies
+### 6) Install Tezos Dependencies
 
 `opam init --bare`
 
@@ -82,7 +82,7 @@ Answer the prompts with `N` then `y`
 
 A switch error may appear, but you can ignore it.
 
-##### Compile Sources
+### 7) Compile Sources
 
 `eval $(opam env)`
 
@@ -91,13 +91,13 @@ A switch error may appear, but you can ignore it.
 You can verify the client version using `./tezos-client --version`
 
 
-##### Generate Identity
+### 8) Generate Identity
 
 `./tezos-node identity generate`
 
 This might take a minute
 
-##### Download and Import a Snapshot
+### 9) Download and Import a Snapshot
 
 * Download the most recent Mainnet Rolling snapshot from [Giganode](https://snapshots-tezos.giganode.io/)
 * Rename the file to something shorter (optional) and move it to the tezos folder.
@@ -108,32 +108,32 @@ This might take a minute
 The import will take a good bit of time.
 
 
-#### 5) Starting the Node and Pointing the RPC
+## Starting the Node and Pointing the RPC
 
 Once the snapshot has been imported, you can start the node. It will still take a little while to catch up to the current block.
 
-##### Find the IP for WSL
+### 1) Find the IP for WSL
 
 * Open another Ubuntu session
 * Run `ip add`
 
 The IP will be towards the bottom of the printout.
 
-##### Start the Node
+### 2) Start the Node
 
 Run the following command using the WSL IP address.
 
 `./tezos-node run --rpc-addr XXX.XX.XX.XX:8732 --allow-all-rpc XXX.XX.XX.XX:8732 --cors-header='content-type' --cors-origin='*'`
 
-##### Wait for the Node to Sync
+### 3) Wait for the Node to Sync
 
 * It will take a bit for the node to catch up to the current block. Once it's synced you the log will slow down. 
 * Check that the node is synced buy running `./tezos-client bootstrapped`
 * When you see the message `Node is Bootstrapped`, your node is ready.
 
-#### 6) Setup Temple Wallet to use your local Node
+## Setup Temple Wallet to use your local Node
 
-##### Add a Custom RPC
+### 1) Add a Custom RPC
 
 * In Temple, go to Settings > Networks
 * Scroll to the bottom to add a new network
@@ -143,7 +143,10 @@ Run the following command using the WSL IP address.
 * Click `Add Network`
 
 
-#### Credits
+## Credits
+
 [OpenTezos](https://opentezos.com/deploy-a-node)
+
 [Baking Benjamins](https://docs.bakingbenjamins.com/baking/setup-tezos-node-with-rpc)
+
 [Tezos Dev Resources](https://tezos.gitlab.io/user/node-configuration.html#rpc-parameters)
